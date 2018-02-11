@@ -1,0 +1,8 @@
+"gcc -o cash cash.c -lm -I.. -L.. -lcs50"
+
+-lm is for adding the math.h standard library which I'm adding for the floor function
+-I.. is telling compiler to look at parent directory to find my copy of cs50.h header file
+-L.. is telling compiler to look at parent directory to find my archive libcs50.a file
+-lcs50 says to use libcs50.a (you omit the "lib" and us "-l" in front of the library name which is cs50.a)
+
+
