@@ -1,7 +1,15 @@
 
 # code block IDE files
+
+
 *.cbp
+
 *.layout
+*.depend
+*/Debug/*
+
+
+
 
 # ignore C intermediate files
 *.o
