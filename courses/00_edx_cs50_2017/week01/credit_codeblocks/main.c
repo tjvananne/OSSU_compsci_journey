@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-# define VERBOSE 1
+# define VERBOSE 0
 
 /* Next steps:
 
@@ -30,9 +30,11 @@ int main(void)
 
   printf("Please enter credit card number below:\n");
 
+
   // initializing some space for user input
   int max_input_length = 20;
   int user_input[max_input_length];
+
   int i;
   for (i = 0; i < max_input_length; i++)
     user_input[i] = 0;
@@ -46,29 +48,63 @@ int main(void)
     if ((c = getchar()) == EOF) {
       break;
     } else {
+      //only add numeric characters to the user input, remaining indeces of array are 0's
       if (c >= '0' & c <= '9') {
         user_input[valid_indx] = c;
         valid_indx++;
       }
     }
   }
+  printf("\n");
 
-  // print the card number back to the user
-  printf("\n");
-  for (i = 0; i < valid_indx; i++) {
-    printf("%c", user_input[i]);
+  // print the card number back to the user (only the valid entries)
+
+  if (VERBOSE) {
+    printf("\n");
+    for (i = 0; i < valid_indx; i++) {
+      printf("%c", user_input[i]);
+    }
+    printf("\n");
   }
-  printf("\n");
+
 
 
   // print reverse index for practice - cool, that works
   // this is first step in luhn algo
+
+  // this int is a flag for when to multiply by two or not (every other one)
+  int multiply_by_two, this_digit, sum_of_twos, sum_of_ones, digit_doubled;
+  multiply_by_two = this_digit = sum_of_twos = sum_of_ones = digit_doubled = 0;
+
+  // start at last valid entry and work your way back...
   for (i = valid_indx; i > 0; i--) {
-    printf("%c, ", user_input[(i - 1)]);
+
+    // subtract 1 from valid digit index to get the real value within the array
+    this_digit = user_input[(i - 1)] - '0';
+
+    // if this flag is set to 1, multiply the digit by two
+    if (multiply_by_two == 1) {
+      digit_doubled = this_digit * 2;
+
+      // if the doubled digit is above ten, we need to add the two individual digits together
+      if (digit_doubled >= 10) {
+        sum_of_twos = sum_of_twos + 1;                    // adding the 1 for the tens place
+        sum_of_twos = sum_of_twos + (digit_doubled % 10); // add the remainder
+      } else {
+        sum_of_twos = sum_of_twos + digit_doubled;
+      }
+      multiply_by_two = 0;
+    } else {
+      sum_of_ones = sum_of_ones + this_digit;
+      multiply_by_two = 1;
+    }
   }
 
 
-
+  if ((sum_of_twos + sum_of_ones) % 10 != 0) {
+    printf("INVALID\n");
+    return(0);
+  }
 
 
   printf("\n");
@@ -78,69 +114,19 @@ int main(void)
   // test for amex (starts with 34 or 37 and is 15 digits)
   if (user_input[0] == '3' && (user_input[1] == '4' ||
       user_input[1] == '7') && valid_indx == 15) {
-    printf("AMEX!");
+    printf("AMEX\n");
   } else {
     printf("not amex!, valid_indx is %d\n", valid_indx);
   }
 
-
+  // test for master card (first digit 5, second digit 1-5, length of card is 16 digits
+  if (user_input[0] == '5' && user_input[1] > '0' &&
+      user_input[1] < '6' && valid_indx == 16) {
+    printf("MASTERCARD\n");
+  }
 
 
 
 
 }
-
-
-  // OLD
-  /*
-
-  //declare ccnum (credit card number) to be array of 16 places
-  int ccnum[16];
-
-  // initialize all to zero
-  int i, c;
-  for (i = 0; i < 16; i++) {
-    ccnum[i] = 0;
-  }
-
-  // make sure it's initialized to all zeros?
-  if(VERBOSE) {
-    printf("testing if they are all zero\n");
-    for(int j = 0; j < 16; j++) {
-      printf("%d", ccnum[j]);
-    }
-    printf("\n");
-  }
-
-
-  i = 0;
-  while ((c = getchar()) != EOF && i < 16) {
-    if (c >= '0' && c <= '9') {
-
-      if(VERBOSE) {
-        printf("value of c is %c and numeric value is %d\n", c, c - '0');
-        printf("value of i is %d\n", i);
-      }
-
-      if(i > 16)
-        printf("Ignoring digits after 16 - no credit card should have more than 16 digits\n");
-
-
-      ccnum[i] = (c - '0');
-      i++;
-    }
-  }
-
-  i = 0;
-  printf("printing them all out to see their value\n");
-  for (i = 0; i < 16; i++) {
-    printf("%d", ccnum[i]);
-  }
-
-  printf("\n");
-
-}
-
-*/
-
 
