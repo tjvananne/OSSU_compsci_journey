@@ -55,7 +55,8 @@ int main(void)
       }
     }
   }
-  printf("\n");
+
+  if (VERBOSE) { printf("\n"); }
 
   // print the card number back to the user (only the valid entries)
 
@@ -106,17 +107,12 @@ int main(void)
     return(0);
   }
 
-
   printf("\n");
-
-
 
   // test for amex (starts with 34 or 37 and is 15 digits)
   if (user_input[0] == '3' && (user_input[1] == '4' ||
       user_input[1] == '7') && valid_indx == 15) {
     printf("AMEX\n");
-  } else {
-    printf("not amex!, valid_indx is %d\n", valid_indx);
   }
 
   // test for master card (first digit 5, second digit 1-5, length of card is 16 digits
@@ -125,7 +121,10 @@ int main(void)
     printf("MASTERCARD\n");
   }
 
-
+  // test for visa (13 or 16 digits and starts with a 4)
+  if (user_input[0] == '4' && (valid_indx == 13 || valid_indx == 16)) {
+      printf("VISA\n");
+  }
 
 
 }
