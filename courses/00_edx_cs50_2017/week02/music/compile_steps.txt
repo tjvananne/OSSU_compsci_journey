@@ -1,0 +1,25 @@
+ok so I couldn't get make to work locally even after installing clang.
+
+I added cs50.c and cs50.h into this local directory.
+
+I've been able to compile wav.c with:
+
+    gcc -c wav.c -I .
+
+I can also compile helpers.c with:
+
+    gcc -c helpers.c -I .
+
+and finally cs50:
+
+    gcc -c cs50.c -I .
+
+then I create the library for music:
+
+    ar rcs libmusic.a cs50.o helpers.o wav.o
+
+and finally compile notes.c:
+
+    gcc -o notes notes.c -I . -L . -lmusic -lm
+
+Note that you still need to add the link to the math library.
