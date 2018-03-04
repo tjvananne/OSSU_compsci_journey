@@ -13,3 +13,9 @@
 
 # ignore C intermediate files
 *.o
+
+
+# ignore swap files if I'm currently editing
+*.swp
+
+
