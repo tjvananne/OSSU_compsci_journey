@@ -48,30 +48,86 @@ Keep in mind, a single character of hexadecimal represents 4 bits, so two charac
 
 
 
-
 ## What's the difference between `bfSize` and `biSize`?
 
-TODO
+* **bfSize**: the entire size of the bitmap file
+* **biSize**: the size of the header of the bitmap in bytes (pro-tip, this is always 40 bytes)
+
 
 ## What does it mean if `biHeight` is negative?
 
-TODO
+https://msdn.microsoft.com/en-us/library/windows/desktop/dd318229(v=vs.85).aspx
+
+* **biHeight**: if it's positive, then the bitmap is a bottom-up bitmap with the origin in the lower left pixel. If it's negative, then the bitmap is a top-down bitmap with the origin in the upper left pixel.
+
 
 ## What field in `BITMAPINFOHEADER` specifies the BMP's color depth (i.e., bits per pixel)?
 
-TODO
+**biBitCount** specifies the number of bits per pixel (color depth).
+
+
 
 ## Why might `fopen` return `NULL` in lines 24 and 32 of `copy.c`?
 
-TODO
+There are many reasons why fopen could return NULL: https://stackoverflow.com/questions/5987626/why-does-fopen-return-a-null-pointer
+
+* file doesn't exist
+* incorrect permissions
+* network is down and the path requires access to the network
+* current directory of the process is different than you expect, so the relative path to the file is wrong
+* file is opened in a mode that doesn't allow other accesses
+
+
 
 ## Why is the third argument to `fread` always `1` in our code?
 
-TODO
+fread takes in four arguments:
+
+1. the pointer to the address in memory to store the thing we're reading in
+2. the size of the elements to be read into memory
+3. the **number of elements** being read into memory
+4. the pointer to a FILE object to read into memory (from disk I take it?)
+
+
+In our code, #2 above is the size of the bitmap file header. So the **number of elements** we need to read in is only 1, because we're only reading in a single bitmap header file at a time. 
+
+
 
 ## What value does line 63 of `copy.c` assign to `padding` if `bi.biWidth` is `3`?
 
-TODO
+First, bi.biWidth is the width of the bitmap in pixels. So this would mean that our image is 3 pixels wide. If we multiply that by the number of bytes per RGBTRIPLE (pixel), that gives us 9 bytes. We need that to be a multiple of four (because of reasons inside of scanf and mathematical reasons we won't get into). In order to make that a value divisible by four, we would need to add 3 bytes of padding (zeroes). So hopefully, going through that exercise by hand will give us a value of 3. 
+
+
+The line of code in questions is this:
+
+
+    int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+
+
+RGBTRIPLE consists of three bytes, so the sizeof() function will return a value of 3. bi.biWidth * 3 will be 3 * 3 which is = 9. That gives us:
+
+	(4 - (9) % 4) % 4
+	
+	
+modulo comes before subtraction, so that should give us:
+
+	
+	(4 - 1) % 4
+	
+	
+which then evaluates to:
+
+
+	3 % 4
+	
+	
+and finally:
+
+
+	3
+	
+
+	
 
 ## What does `fseek` do?
 
