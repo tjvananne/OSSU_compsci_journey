@@ -37,7 +37,17 @@ This is a helpful resources:
 
 ## What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? Leading bytes used to identify file formats (with high probability) are generally called "magic numbers."
 
-TODO
+
+**0x42 0x4D** which is 66 and 77 in decimal respectively.
+
+* https://en.wikipedia.org/wiki/BMP_file_format
+* https://www.rapidtables.com/convert/number/hex-to-decimal.html
+
+Keep in mind, a single character of hexadecimal represents 4 bits, so two characters of hex will be an entire byte (8 bits).
+
+
+
+
 
 ## What's the difference between `bfSize` and `biSize`?
 
