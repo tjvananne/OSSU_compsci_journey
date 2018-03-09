@@ -131,8 +131,20 @@ and finally:
 
 ## What does `fseek` do?
 
-TODO
+
+fseek moves the file pointer associated with a given file to a specific position.
+
+int fseek(FILE *pointer, long int offset, int position)
+
+* pointer: pointer to a FILE object that identifies the stream
+* offset: number of bytes to offset from position
+* position: position from where offset is added
+
+
+In our case, we're using the fseek to skip over padding if there is any (at some point during the reading in of the bitmap file. I haven't really dug into this entire process yet).
+
+
 
 ## What is `SEEK_CUR`?
 
-TODO
+SEEK_CUR represents the current location of the pointer within that FILE pointer object.
